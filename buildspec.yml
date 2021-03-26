@@ -21,7 +21,7 @@ phases:
       - export image="${image:-$REPO/$name}"
       - export ecr_image="${REPO}/${name}"
 
-      - docker build -t $image:$version -t $ecr_image:$version
+      - docker build -t $image:$version -t $ecr_image:$version .
 
       - docker tag $image:$version $image:$CODEBUILD_BUILD_NUMBER
       - docker tag $image:$version $image:latest
