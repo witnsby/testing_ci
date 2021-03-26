@@ -1,32 +1,28 @@
 version: 0.2
 
 env:
+  shell: bash
   variables:
     ACCOUNTID: "991663395193"
     name: "terraform"
+
 
 phases:
   pre_build:
     commands:
       - echo Nothing to do in the pre_build phase...
+      - source .env
+      - aws ecr get-login-password --region $AWS_REGION
   build:
     commands:
       - echo Build started on `date`
-      - REGION=$AWS_REGION
-      - ACCOUNTID=991663395193
-      - REPO=${ACCOUNTID}.dkr.ecr.${REGION}.amazonaws.com
-      - GIT_SHA=$(git rev-parse HEAD 2>/dev/null | cut -c 1-7)
-      - version="${GIT_SHA}"
 
-      - image="${image:-$REPO/$name}"
-      - ecr_image="${REPO}/${name}"
-
-      - docker build -t $image:$version -t $ecr_image:$version
-
-      - docker tag $image:$version $image:$CODEBUILD_BUILD_NUMBER
-      - docker tag $image:$version $image:latest
+      - docker build -t $image:$version -t $ecr_image:$version .
       - docker tag $ecr_image:$version $ecr_image:$CODEBUILD_BUILD_NUMBER
       - docker tag $ecr_image:$version $ecr_image:latest
   post_build:
     commands:
+      - aws ecr get-login-password --region $AWS_REGION | docker login --username AWS --password-stdin $ACCOUNTID.dkr.ecr.$AWS_REGION.amazonaws.com/$name
+      - docker push $ecr_image:$CODEBUILD_BUILD_NUMBER
+      - docker push $ecr_image:latest
       - echo Build completed on `date`
