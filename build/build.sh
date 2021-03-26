@@ -13,7 +13,7 @@ jq_executor=$(which jq)
 # $docker_executor rmi $name
 
 REGION=$AWS_REGION
-ACCOUNTID=$(curl -s http://169.254.169.254/latest/dynamic/instance-identity/document | jq -r .accountId)
+ACCOUNTID=991663395193
 REPO=${ACCOUNTID}.dkr.ecr.${REGION}.amazonaws.com
 GIT_SHA=$(git rev-parse HEAD 2>/dev/null | cut -c 1-7)
 version="${GIT_SHA}"
