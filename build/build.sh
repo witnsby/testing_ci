@@ -12,7 +12,7 @@ docker_executor='docker'
 # $docker_executor rmi $name
 
 REGION=$AWS_REGION
-ACCOUNTID=$CODEBUILD_WEBHOOK_ACTOR_ACCOUNT_ID
+ACCOUNTID=991663395193
 REPO=${ACCOUNTID}.dkr.ecr.${REGION}.amazonaws.com
 GIT_SHA=$(git rev-parse HEAD 2>/dev/null | cut -c 1-7)
 version="${GIT_SHA}"
