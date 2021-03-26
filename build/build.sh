@@ -5,12 +5,6 @@ set -x
 name="terraform"
 
 docker_executor=$(which docker)
-jq_executor=$(which jq)
-
-# echo $CODEBUILD_BUILD_NUMBER
-
-# $docker_executor rm $name
-# $docker_executor rmi $name
 
 REGION=$AWS_REGION
 ACCOUNTID=991663395193
