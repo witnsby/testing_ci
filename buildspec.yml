@@ -9,6 +9,7 @@ phases:
       - echo Build started on `date`
       - docker build -t 001 .
       - echo Image was built
+      - chmod +x ./build/build.sh && ./build/build.sh
   post_build:
     commands:
       - echo Build completed on `date`
