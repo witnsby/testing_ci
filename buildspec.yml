@@ -25,6 +25,7 @@ phases:
       - docker tag $ecr_image:$version $ecr_image:latest
   post_build:
     commands:
+      - aws ecr get-login-password --region $AWS_REGION
       - docker push $image:$version $image:$CODEBUILD_BUILD_NUMBER
       - docker push $image:$version $image:latest
       - docker push $ecr_image:$version $ecr_image:$CODEBUILD_BUILD_NUMBER
