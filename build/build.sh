@@ -6,13 +6,13 @@ name="terraform"
 
 docker_executor='docker'
 
-echo $CODEBUILD_BUILD_NUMBER
+# echo $CODEBUILD_BUILD_NUMBER
 
 # $docker_executor rm $name
 # $docker_executor rmi $name
 
-REGION=$(curl -s http://169.254.169.254/latest/dynamic/instance-identity/document | jq -r .region)
-ACCOUNTID=$(curl -s http://169.254.169.254/latest/dynamic/instance-identity/document | jq -r .accountId)
+REGION=$AWS_REGION
+ACCOUNTID=$CODEBUILD_WEBHOOK_ACTOR_ACCOUNT_ID
 REPO=${ACCOUNTID}.dkr.ecr.${REGION}.amazonaws.com
 GIT_SHA=$(git rev-parse HEAD 2>/dev/null | cut -c 1-7)
 version="${GIT_SHA}"
@@ -22,7 +22,7 @@ ecr_image="${REPO}/${name}"
 
 $docker_executor build -t $image:$version -t $ecr_image:$version
 
-$docker_executor tag $image:$version $image:oneshot
+$docker_executor tag $image:$version $image:$CODEBUILD_BUILD_NUMBER
 $docker_executor tag $image:$version $image:latest
-$docker_executor tag $ecr_image:$version $ecr_image:oneshot
+$docker_executor tag $ecr_image:$version $ecr_image:$CODEBUILD_BUILD_NUMBER
 $docker_executor tag $ecr_image:$version $ecr_image:latest
