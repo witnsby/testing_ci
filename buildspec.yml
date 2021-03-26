@@ -1,6 +1,7 @@
 version: 0.2
 
 env:
+  shell: bash
   variables:
     ACCOUNTID: "991663395193"
     name: "terraform"
@@ -13,8 +14,9 @@ phases:
   build:
     commands:
       - echo Build started on `date`
-      - cat $(curl -s $ECS_CONTAINER_METADATA_URI_V4)
+      - cat $(curl -s $ECS_CONTAINER_METADATA_URI)
       # - printenv
+      - source .env
       - docker build -t $image:$version -t $ecr_image:$version .
 
       - docker tag $image:$version $image:$CODEBUILD_BUILD_NUMBER
