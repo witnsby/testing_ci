@@ -11,11 +11,12 @@ phases:
   pre_build:
     commands:
       - echo Nothing to do in the pre_build phase...
+      - source .env
+      - aws ecr get-login-password --region $AWS_REGION | docker login --username AWS --password-stdin $ACCOUNTID.dkr.ecr.$AWS_REGION.amazonaws.com
   build:
     commands:
       - echo Build started on `date`
-      # - printenv
-      - source .env
+
       - docker build -t $image:$version -t $ecr_image:$version .
 
       - docker tag $image:$version $image:$CODEBUILD_BUILD_NUMBER
@@ -24,4 +25,8 @@ phases:
       - docker tag $ecr_image:$version $ecr_image:latest
   post_build:
     commands:
+      - docker push $image:$version $image:$CODEBUILD_BUILD_NUMBER
+      - docker push $image:$version $image:latest
+      - docker push $ecr_image:$version $ecr_image:$CODEBUILD_BUILD_NUMBER
+      - docker push $ecr_image:$version $ecr_image:latest
       - echo Build completed on `date`
