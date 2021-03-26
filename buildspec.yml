@@ -14,7 +14,6 @@ phases:
   build:
     commands:
       - echo Build started on `date`
-      - cat $(curl -s $ECS_CONTAINER_METADATA_URI)
       # - printenv
       - source .env
       - docker build -t $image:$version -t $ecr_image:$version .
