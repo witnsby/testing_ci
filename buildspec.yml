@@ -13,7 +13,7 @@ phases:
   build:
     commands:
       - echo Build started on `date`
-      - export .env
+      - source .env
 
       - docker build -t $image:$version -t $ecr_image:$version .
 
