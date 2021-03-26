@@ -7,13 +7,10 @@ phases:
   build:
     commands:
       - echo Build started on `date`
-      - jq --version
-      - which jq
-      - which docker
       # - docker build -t $IMAGE_REPO_NAME:$IMAGE_TAG .
       # - docker tag $IMAGE_REPO_NAME:$IMAGE_TAG $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$IMAGE_REPO_NAME:$IMAGE_TAG
       # - echo Image was built
-      # - chmod +x ./build/build.sh && ./build/build.sh
+      - chmod +x ./build/build.sh && ./build/build.sh
   post_build:
     commands:
       - echo Build completed on `date`
