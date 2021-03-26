@@ -13,8 +13,8 @@ phases:
   build:
     commands:
       - echo Build started on `date`
-      - source .env
-
+      # - source .env
+      - printenv
       - docker build -t $image:$version -t $ecr_image:$version .
 
       - docker tag $image:$version $image:$CODEBUILD_BUILD_NUMBER
