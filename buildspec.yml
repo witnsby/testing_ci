@@ -4,10 +4,10 @@ env:
   variables:
     ACCOUNTID: "991663395193"
     name: "terraform"
-    REGION: $AWS_REGION
-    REPO: ${ACCOUNTID}.dkr.ecr.${REGION}.amazonaws.com
-    GIT_SHA: $(git rev-parse HEAD 2>/dev/null | cut -c 1-7)
-    version: $GIT_SHA
+    REGION: "$AWS_REGION"
+    REPO: "${ACCOUNTID}.dkr.ecr.${REGION}.amazonaws.com"
+    GIT_SHA: "$(git rev-parse HEAD 2>/dev/null | cut -c 1-7)"
+    version: "$GIT_SHA"
 
     image: "${image:-$REPO/$name}"
     ecr_image: "${REPO}/${name}"
