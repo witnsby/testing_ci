@@ -1,5 +1,10 @@
 version: 0.2
 
+env:
+  variables:
+    ACCOUNTID: "991663395193"
+    name: "terraform"
+
 phases:
   pre_build:
     commands:
@@ -7,10 +12,21 @@ phases:
   build:
     commands:
       - echo Build started on `date`
-      # - docker build -t $IMAGE_REPO_NAME:$IMAGE_TAG .
-      # - docker tag $IMAGE_REPO_NAME:$IMAGE_TAG $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$IMAGE_REPO_NAME:$IMAGE_TAG
-      # - echo Image was built
-      - chmod +x ./build/build.sh && ./build/build.sh
+      - REGION=$AWS_REGION
+      - ACCOUNTID=991663395193
+      - REPO=${ACCOUNTID}.dkr.ecr.${REGION}.amazonaws.com
+      - GIT_SHA=$(git rev-parse HEAD 2>/dev/null | cut -c 1-7)
+      - version="${GIT_SHA}"
+
+      - image="${image:-$REPO/$name}"
+      - ecr_image="${REPO}/${name}"
+
+      - docker build -t $image:$version -t $ecr_image:$version
+
+      - docker tag $image:$version $image:$CODEBUILD_BUILD_NUMBER
+      - docker tag $image:$version $image:latest
+      - docker tag $ecr_image:$version $ecr_image:$CODEBUILD_BUILD_NUMBER
+      - docker tag $ecr_image:$version $ecr_image:latest
   post_build:
     commands:
       - echo Build completed on `date`
