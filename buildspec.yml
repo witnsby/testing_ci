@@ -17,12 +17,12 @@ phases:
     commands:
       - echo Build started on `date`
 
-      - docker build -t $image:$VERSION -t $ecr_image:$VERSION .
-      - docker tag $ecr_image:$VERSION $ecr_image:$CODEBUILD_BUILD_NUMBER
-      - docker tag $ecr_image:$VERSION $ecr_image:latest
+      - docker build -t $IMAGE:$VERSION -t $ECR_IMAGE:$VERSION .
+      - docker tag $ECR_IMAGE:$VERSION $ECR_IMAGE:$CODEBUILD_BUILD_NUMBER
+      - docker tag $ECR_IMAGE:$VERSION $ECR_IMAGE:latest
   post_build:
     commands:
       - aws ecr get-login-password --region $AWS_REGION | docker login --username AWS --password-stdin $ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$name
-      - docker push $ecr_image:$CODEBUILD_BUILD_NUMBER
-      - docker push $ecr_image:latest
+      - docker push $ECR_IMAGE:$CODEBUILD_BUILD_NUMBER
+      - docker push $ECR_IMAGE:latest
       - echo Build completed on `date`
