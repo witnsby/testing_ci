@@ -2,10 +2,9 @@ version: 0.2
 
 env:
   shell: bash
+  privileged-mode: true
   variables:
     ACCOUNT_ID: "991663395193"
-    ECR_IMAGE_NAME: "terraform"
-
 
 phases:
   pre_build:
