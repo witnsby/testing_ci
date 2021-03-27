@@ -3,8 +3,8 @@ version: 0.2
 env:
   shell: bash
   variables:
-    ACCOUNTID: "991663395193"
-    name: "terraform"
+    ACCOUNT_ID: "991663395193"
+    ECR_IMAGE_NAME: "terraform"
 
 
 phases:
@@ -17,12 +17,12 @@ phases:
     commands:
       - echo Build started on `date`
 
-      - docker build -t $image:$version -t $ecr_image:$version .
-      - docker tag $ecr_image:$version $ecr_image:$CODEBUILD_BUILD_NUMBER
-      - docker tag $ecr_image:$version $ecr_image:latest
+      - docker build -t $image:$VERSION -t $ecr_image:$VERSION .
+      - docker tag $ecr_image:$VERSION $ecr_image:$CODEBUILD_BUILD_NUMBER
+      - docker tag $ecr_image:$VERSION $ecr_image:latest
   post_build:
     commands:
-      - aws ecr get-login-password --region $AWS_REGION | docker login --username AWS --password-stdin $ACCOUNTID.dkr.ecr.$AWS_REGION.amazonaws.com/$name
+      - aws ecr get-login-password --region $AWS_REGION | docker login --username AWS --password-stdin $ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$name
       - docker push $ecr_image:$CODEBUILD_BUILD_NUMBER
       - docker push $ecr_image:latest
       - echo Build completed on `date`
